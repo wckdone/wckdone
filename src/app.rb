@@ -312,8 +312,8 @@ class App < Sinatra::Application
 
   post '/search', approved: true do
     redirect '/search' unless params[:distance]
-    redirect '/search' unless ['male', 'female'].include?(params[:gender])
-    redirect '/search' unless ['any', 'male', 'female'].include?(params[:into])
+    redirect '/search' unless User.genders.include?(params[:gender])
+    redirect '/search' unless User.genders.include?(params[:into])
     current_user.new_search params[:gender], params[:into],
                             params[:keywords], params[:distance].to_i
     redirect '/search/results'
