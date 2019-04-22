@@ -26,6 +26,8 @@ end
 
 module Images
   def create_image tempfile
+    image = MiniMagick::Image::read(tempfile)
+    return nil unless %w(JPEG GIF TIFF PNG).include?(image.type)
     name = SecureRandom.hex(64) + '.jpeg'
     path = '/photos/' + name
     image = MiniMagick::Image.open(tempfile.path)
@@ -35,6 +37,8 @@ module Images
     image.resize '1200x1200>'
     image.write path
     return name
+  rescue
+    return nil
   end
 
   def stream_image name
@@ -90,8 +94,13 @@ class App < Sinatra::Application
   post '/verify', authenticated: true do
     redirect '/verify' if params[:photo].nil? || params[:photo][:tempfile].nil?
     image = create_image params[:photo][:tempfile]
-    current_user.set_verified_photo(image)
-    redirect '/verify'
+    if image.nil?
+      @error = 'Image format not recognized'
+      erb :verify
+    else
+      current_user.set_verified_photo(image)
+      redirect '/verify'
+    end
   end
 
   get '/verify/delete', authenticated: true do
@@ -207,10 +216,15 @@ class App < Sinatra::Application
   end
 
   post '/photos', approved: true do
-    redirect "/photos" if params[:photo].nil? || params[:photo][:tempfile].nil?
-    image = create_image params[:photo][:tempfile]
-    current_user.add_photo(filename: image)
-    redirect "/photos?photo=#{current_user.photos.count() - 1}"
+    redirect "/photos" if params[:photo_file].nil? || params[:photo_file][:tempfile].nil?
+    image = create_image params[:photo_file][:tempfile]
+    if image.nil?
+      @error = 'Image format not recognized'
+      erb :photos
+    else
+      current_user.add_photo(filename: image)
+      redirect "/photos?photo=#{current_user.photos.count() - 1}"
+    end
   end
 
   get '/photos/:id/delete', approved: true do
@@ -280,7 +294,7 @@ class App < Sinatra::Application
     else
       if params[:photo]
         image = create_image params[:photo][:tempfile]
-        Message.send(current_user, @match, nil, image)
+        Message.send(current_user, @match, nil, image) unless image.nil?
       end
       if params[:message]
         Message.send(current_user, @match, params[:message])

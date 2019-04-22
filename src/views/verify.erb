@@ -50,6 +50,11 @@
 	</div>
 	<div class="form-group">
 	    <input type="submit" value="Step 2: Upload">
+	    <% if @error %>
+		<div class="input-error">
+		    <%= @error %>
+		</div>
+	    <% end %>
 	</div>
     </form>
 </div>
