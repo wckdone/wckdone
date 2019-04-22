@@ -1,5 +1,13 @@
-<% @users.each do |u| %>
-    <div>
-	<a href="/verifications/<%= u.id %>"><%= u.username %></a>
-    </div>
+<% content_for :title do %>Pending verification<% end %>
+<h2>Pending verifications</h2>
+<% unless @users.count %>
+    <div>Nada, nothing, caput!</div>
 <% end %>
+<% @users.each do |u| %>
+    <a class="profile-option" href="/verifications/<%= u.id %>">
+	<div class="matches-list-item">
+	    <%= u.username %>
+	</div>
+    </a>
+<% end %>
+<%= erb :_footer, locals: {tab: :none, **locals} %>

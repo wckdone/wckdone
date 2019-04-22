@@ -1,5 +1,6 @@
+<% content_for :title do %>Verification moderation<% end %>
+<h3 style="margin-bottom: 1px">Username: <%= @user.username %></h3>
 <img src="/images/<%= @user.verified_photo %>">
-<%= @user.username %>
 
 <form action="/verifications/<%= @user.id %>/approve" method="POST">
     <input type="submit" value="Approve">
@@ -9,4 +10,5 @@
     <label>Rejection reason</label>
     <input type="text" name="reason">
     <input type="submit" value="Reject">
-<form>
+</form>
+<%= erb :_footer, locals: {tab: :none, **locals} %>
