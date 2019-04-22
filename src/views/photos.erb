@@ -38,10 +38,15 @@
 	    <label class="button" for="select-file">
 		Step 1: Select file
 	    </label>
-	    <input id="select-file" type="file" name="photo">
+	    <input id="select-file" type="file" name="photo_file">
 	</div>
 	<div class="form-group">
 	    <input type="submit" value = "Step 2: Upload">
+	    <% if @error %>
+		<div class="input-error">
+		    <%= @error %>
+		</div>
+	    <% end %>
 	</div>
     </form>
 </div>
