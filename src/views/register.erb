@@ -1,0 +1,95 @@
+<% content_for :title do %>Sign up<% end %>
+<% @user.birth_date = Date.today unless @user.birth_date %>
+<form method="POST">
+    <div class="form-group">
+	<label>Username</label>
+	<input type="text" name="username" value="<%= @user.username %>"
+	       autocorrect="off" autocapitalize="off">
+	<% if @user.errors[:username] %>
+	    <div class="input-error">
+		Username <%= @user.errors[:username][0] %>
+	    </div>
+	<% end %>
+    </div>
+
+    <div class="form-group">
+	<label>Date of birth</label>
+	<div class="form-select-wrap">
+	    <select class="form-select select-month" name="birth_month">
+		<% Date::MONTHNAMES.compact.each_with_index do |m, i| %>
+		    <option value="<%= i + 1 %>"
+			    <%= "selected" if @user.birth_date.month == i + 1 %>>
+			<%= m %>
+		    </option>
+		<% end %>
+	    </select>
+	    <select class="form-select select-day" name="birth_day">
+		<% (1..31).each do |d| %>
+		    <option value="<%= d %>" <%= "selected" if @user.birth_date.day == d %>>
+			<%= d %>
+		    </option>
+		<% end %>
+	    </select>
+	    <select class="form-select select-year" name="birth_year">
+		<% (1920..Date.today.year).each do |y| %>
+		    <option value="<%= y %>" <%= "selected" if @user.birth_date.year == y %> >
+			<%= y %>
+		    </option>
+		<% end %>
+	    </select>
+	</div>
+	<% if @user.errors[:birth_date] %>
+	    <div class="input-error">
+		Date of birth <%= @user.errors[:birth_date][0] %>
+	    </div>
+	<% end %>
+    </div>
+
+    <div class="form-group">
+	<label>I am a</label>
+	<div class="form-select-wrap">
+	    <select class="form-select" name="gender">
+		<% User.genders.each do |g| %>
+		    <option value="<%= g %>" <%= "selected" if @user.gender == g %> >
+			<%= g %>
+		    </option>
+		<% end %>
+	    </select>
+	</div>
+    </div>
+
+    <div class="form-group">
+	<label>Looking for a</label>
+	<% User.genders.each do |g| %>
+	    <label for="into-<%= g %>" class="form-checkbutton-label">
+		<input type="checkbox" id="into-<%= g %>" name="into-<%= g %>"
+			     <%= 'checked' if !@into_genders.nil? && @into_genders.include?(g) %>>
+		<i class="fas fa-check form-checkbox-checked"></i>
+		<i class="far fa-circle form-checkbox-not-checked"></i>
+		<div class="form-checkbox-text"><%= g %></div>
+	    </label>
+	<% end %>
+	<% if @user.errors[:into] %>
+	    <div class="input-error">
+		Gender preference <%= @user.errors[:into][0] %>
+	    </div>
+	<% end %>
+    </div>
+
+    <div class="form-group">
+	<label>Password</label>
+	<input type="password" name="password" value=<%= @user.password %>>
+	<% if @user.errors[:password] %>
+	    <div class="input-error">
+		Password <%= @user.errors[:password][0] %>
+	    </div>
+	<% end %>
+    </div>
+
+    <div class="form-group">
+	<input type="submit" value="Create account">
+	<div>
+	    <small>Already have an account? <a class="link" href="/login">Login instead</a></small>
+	</div>
+    </div>
+</form>
