@@ -1,8 +1,10 @@
 #!/bin/sh
 
+export DEBIAN_FRONTEND=noninteractive
+
 #Build essentials
 sudo apt-get update -y	
-sudo apt-get install -y build-essential tmux emacs-nox
+sudo apt-get install -y build-essential git
 
 # Docker
 sudo apt-get -yff install \
@@ -29,10 +31,6 @@ sudo apt-get install -yff redis
 sudo apt-get install -yff mysql-server libmysqlclient-dev
 sudo apt-get install -yff imagemagick
 
-# Mysql setup
-sudo mysql -e "CREATE USER 'wckdone'@'localhost' IDENTIFIED BY 'password';"
-sudo mysql -e "GRANT ALL ON *.* TO 'wckdone'@'localhost' WITH GRANT OPTION;"
-sudo mysql -e "FLUSH PRIVILEGES;"
 
 # Shell setup
 echo 'export PATH="$HOME/.rbenv/bin:$PATH"' >> ~/.bashrc

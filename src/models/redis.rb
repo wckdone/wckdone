@@ -1,4 +1,4 @@
 require 'redis'
 require 'connection_pool'
 
-REDIS = ConnectionPool.new(size: 10) { Redis.new }
+REDIS = ConnectionPool.new(size: 10) { Redis.new(ENV['REDIS_URL']) }
