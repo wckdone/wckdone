@@ -1,7 +1,10 @@
 <% content_for :title do %>Profile options<% end %>
 <div>
+    <div class="profile-option" style="font-weight: 600; font-size: 18px; cursor: default">
+	Profile
+    </div>
     <a class="profile-option" href="/user/<%= current_user.id %>">
-	View your profile
+	View
     </a>
     <a class="profile-option" href="/verify">
 	Verification photo
@@ -13,7 +16,7 @@
 	Description
     </a>
     <a class="profile-option" href="/gender">
-	Gender and Gender preferences
+	Gender
     </a>
     <a class="profile-option" href="/email">
 	Email
