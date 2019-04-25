@@ -3,6 +3,7 @@ GEM
   specs:
     backports (3.13.0)
     bcrypt (3.1.12)
+    bson (4.4.2)
     connection_pool (2.2.2)
     crass (1.0.4)
     faraday (0.15.4)
@@ -10,6 +11,8 @@ GEM
     kramdown (2.1.0)
     mini_magick (4.9.3)
     mini_portile2 (2.4.0)
+    mongo (2.8.0)
+      bson (>= 4.4.2, < 5.0.0)
     multi_json (1.13.1)
     multipart-post (2.0.0)
     mustermann (1.0.3)
@@ -60,6 +63,7 @@ DEPENDENCIES
   connection_pool
   kramdown
   mini_magick
+  mongo
   mysql2
   sanitize
   sendgrid-ruby

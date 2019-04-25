@@ -4,6 +4,9 @@
 	<title><%= yield_content :title %></title>
     </head>
     <body>
+	<% unless @flash.message.nil? %>
+	    <div class="notification"><%= @flash.message %></div>
+	<% end %>
 	<div class="fullscreen">
 	    <div class="content">
 		<%= yield %>

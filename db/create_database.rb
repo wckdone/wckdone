@@ -2,7 +2,7 @@ require 'logger'
 require 'redis'
 require 'sequel'
 
-REDIS = Redis.new(ENV['REDIS_URL'])
+REDIS = Redis.new(url: ENV['REDIS_URL'])
 
 url = if ENV['DATABASE_URL'].include? 'postgresql'
         "#{ENV['DATABASE_URL']}/postgres"

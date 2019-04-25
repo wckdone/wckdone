@@ -478,3 +478,30 @@ textarea {
 .verify-example-photo {
     margin: 0 12px 12px 12px;
 }
+@keyframes moveup {
+  from {top: 0;}
+  to {top: -100;}
+}
+.notification-anchor {
+    position: relative;
+}
+.notification {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 30px;
+    background-color: #fffbdd;
+    color: #735c0f;
+    animation-name: moveup;
+    animation-duration: .5s;
+    animation-delay: 2s;
+    animation-fill-mode: forwards;
+    -webkit-animation-fill-mode: forwards;
+    -moz-animation-fill-mode: forwards;
+    -o-animation-fill-mode: forwards;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1;
+}

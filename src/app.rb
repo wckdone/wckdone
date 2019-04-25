@@ -21,6 +21,7 @@ module Authentication
     cookies[:token] = session.token
     session.user.log_visit(request.ip)
     @current_user = session.user
+    @flash = Flash.new session.token
   end
 end
 
@@ -87,6 +88,11 @@ class App < Sinatra::Application
     erb :profile
   end
 
+  get '/redirect', authenticated: true do
+    @flash.message = "good!"
+    redirect '/profile'
+  end
+
   get '/verify', authenticated: true do
     erb :verify
   end
@@ -99,12 +105,14 @@ class App < Sinatra::Application
       erb :verify
     else
       current_user.set_verified_photo(image)
+      @flash.message = 'Verified photo updated'
       redirect '/verify'
     end
   end
 
   get '/verify/delete', authenticated: true do
     current_user.delete_verified_photo
+    @flash.message = 'Verified photo deleted'
     redirect '/verify'
   end
 
@@ -128,6 +136,7 @@ class App < Sinatra::Application
     user = User.find(id: params[:id])
     redirect '/verifications' unless user&.is_pending?
     user.set_review_status current_user.id, :approved
+    @flash.message = "User's verified photo approved"
     redirect '/verifications'
   end
 
@@ -135,6 +144,7 @@ class App < Sinatra::Application
     user = User.find(id: params[:id])
     redirect '/verifications' unless user&.is_pending?
     user.set_review_status current_user.id, :rejected, params[:reason]
+    @flash.message = "User's verified photo rejected"
     redirect '/verifications'
   end
   
@@ -189,6 +199,7 @@ class App < Sinatra::Application
   
   post '/description', authenticated: true do
     current_user.set_description(params[:description])
+    @flash.message = 'Description updated'
     redirect '/profile'
   end
 
@@ -202,8 +213,9 @@ class App < Sinatra::Application
                       filter{|g| g != nil} || []
     @user.gender = params['gender']
     if @user.valid? && @into_genders.length > 0
-      @user.save
+      @user.save_changes
       @user.set_gender_interests @into_genders
+      @flash.message = 'Genders updated'
       redirect '/profile'
     else
       @user.errors.add(:into, 'cannot be empty') if @into_genders.length < 1
@@ -223,6 +235,7 @@ class App < Sinatra::Application
       erb :photos
     else
       current_user.add_photo(filename: image)
+      @flash.message = 'Photo added'
       redirect "/photos?photo=#{current_user.photos.count() - 1}"
     end
   end
@@ -231,6 +244,7 @@ class App < Sinatra::Application
     photo_id = params[:id].to_i
     if photo_id >= 0 && photo_id < current_user.photos.count()
       current_user.photos[params[:id].to_i].delete
+      @flash.message = 'Photo deleted'
     end
     redirect '/photos'
   end
@@ -299,6 +313,7 @@ class App < Sinatra::Application
       if params[:message]
         Message.send(current_user, @match, params[:message])
       end
+      @flash.message = 'Message sent'
       redirect "/matches/#{@match.id}#focus"
     end
   end
@@ -354,6 +369,7 @@ class App < Sinatra::Application
     if current_user.errors
       erb :email
     else
+      @flash.message = 'Email updated'
       redirect '/profile'
     end
   end
@@ -376,6 +392,7 @@ class App < Sinatra::Application
     if @user.errors.count > 0
       erb :password
     else
+      @flash.message = 'Password changed'
       redirect '/profile'
     end
   end

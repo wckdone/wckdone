@@ -99,6 +99,9 @@ class User < Sequel::Model
     self.latitude = location['latitude']
     self.location = "#{location['city']}, #{location['region_name']}, " +
                     "#{location['country_name']}"
+    REDIS.with do |conn|
+      conn.geoadd 'locations', self.longitude, self.latitude, self.id
+    end
     self.save_changes
   end
 

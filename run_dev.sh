@@ -1,8 +1,8 @@
 #!/bin/sh
 
-export DATABASE_URL="mysql2://root:password@mysql"
-export REDIS_URL="redis://redis"
-export APP_ENV="development"
+DATABASE_URL=${DATABASE_URL:-"mysql2://root:password@mysql"}
+REDIS_URL=${REDIS_URL:-"redis://redis"}
+APP_ENV="development"
 
 sudo bundle install
 
