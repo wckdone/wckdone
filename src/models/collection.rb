@@ -20,9 +20,5 @@ class Collection
 end
 
 class Users < Collection
-  field :username, :password
-  
+  field :username, :password  
 end
-
-
-puts Users.fields

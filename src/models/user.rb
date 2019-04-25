@@ -90,7 +90,6 @@ class User < Sequel::Model
       self.last_ip = ip
       LocationWorker.perform_async(self.id, ip)
     end
-    puts self.last_visit
     self.save_changes
   end
 
