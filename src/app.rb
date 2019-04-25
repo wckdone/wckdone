@@ -368,7 +368,8 @@ class App < Sinatra::Application
   post '/email', authenticated: true do
     redirect '/email' unless ['yes', 'no'].include? params[:email_notifications]
     current_user.email_update params[:email], params[:email_notifications] == 'yes'
-    if current_user.errors
+    unless current_user.valid?
+      request.logger.info current_user.errors
       erb :email
     else
       @flash.message = 'Email updated'
