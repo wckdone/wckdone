@@ -269,6 +269,8 @@ class App < Sinatra::Application
     redirect '/' unless ['pass', 'like'].include? params[:action]
     Action.create_or_update source: current_user.id, destination: user.id,
                             action: params[:action]
+    act = {like: 'Liked', pass: 'Passed on'}
+    @flash.message = "#{act[params[:action].to_sym]} #{user.username}"
     if params[:next]
       redirect params[:next]
     else

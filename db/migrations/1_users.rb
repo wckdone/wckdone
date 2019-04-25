@@ -5,8 +5,6 @@ Sequel.migration do
       String :username, null: false, unique: true
       Date :birth_date, null: false
       String :gender, null: false
-      Boolean :into_females, null: false
-      Boolean :into_males, null: false
       String :password_digest, null: false
       Boolean :is_admin, null: false, default: false
       Boolean :is_super, null: false, default: false
